@@ -3,7 +3,7 @@
 
 > Trade your skill. Learn theirs. Zero rupees.
 
-**[🔗 Live Demo](#)** <!-- Vercel link yahan dalenge -->
+**[🔗 Live Demo](https://skillswap-ten-lilac.vercel.app/)**
 
 ---
 
