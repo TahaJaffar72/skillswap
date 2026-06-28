@@ -1,0 +1,1367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>SkillSwap — Trade Skills. Zero Rupees.</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0E0C0A;
+  --surface:#1A1612;
+  --surface2:#221E19;
+  --surface3:#2A2520;
+  --border:rgba(242,237,228,0.06);
+  --border2:rgba(242,237,228,0.11);
+  --border3:rgba(242,237,228,0.18);
+  --text:#F2EDE4;
+  --text2:#C8BFB0;
+  --muted:#7A7168;
+  --muted2:#504840;
+  --yellow:#E8C547;
+  --yellow-dim:rgba(232,197,71,0.10);
+  --yellow-border:rgba(232,197,71,0.28);
+  --yellow-glow:rgba(232,197,71,0.15);
+  --orange:#E85D26;
+  --orange-dim:rgba(232,93,38,0.10);
+  --mint:#4ECBA4;
+  --mint-dim:rgba(78,203,164,0.10);
+  --mint-border:rgba(78,203,164,0.25);
+  --red:#E85D26;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-size:16px;line-height:1.6;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+a{text-decoration:none;color:inherit}
+button{cursor:pointer;font-family:inherit}
+::-webkit-scrollbar{width:3px}
+::-webkit-scrollbar-thumb{background:var(--yellow);opacity:0.3;border-radius:99px}
+
+/* ══ LOGO SVG MARK ══ */
+.logo-mark svg{width:28px;height:28px}
+
+/* ══ NAV ══ */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:200;
+  display:flex;justify-content:space-between;align-items:center;
+  padding:0 48px;height:62px;
+  background:rgba(14,12,10,0.88);
+  backdrop-filter:blur(24px);
+  border-bottom:1px solid var(--border);
+  transition:background 0.3s;
+}
+.logo{display:flex;align-items:center;gap:10px;font-family:'Sora',sans-serif;font-size:1.1rem;font-weight:800;letter-spacing:-0.3px}
+.logo-text em{font-style:normal;color:var(--yellow)}
+.nav-links{display:flex;gap:2px;list-style:none}
+.nav-links a{color:var(--muted);font-size:0.85rem;font-weight:500;padding:6px 14px;border-radius:6px;transition:all 0.15s;letter-spacing:0.1px}
+.nav-links a:hover,.nav-links a.active{color:var(--text);background:var(--surface2)}
+.nav-right{display:flex;gap:8px;align-items:center}
+.btn-nav-ghost{background:transparent;color:var(--text2);padding:7px 16px;border-radius:6px;font-size:0.83rem;font-weight:500;border:1px solid var(--border2);transition:all 0.15s}
+.btn-nav-ghost:hover{border-color:var(--border3);background:var(--surface2)}
+.btn-nav-primary{background:var(--yellow);color:#0E0C0A;padding:7px 18px;border-radius:6px;font-size:0.83rem;font-weight:700;border:none;transition:all 0.15s;font-family:'Sora',sans-serif;letter-spacing:-0.2px}
+.btn-nav-primary:hover{background:#f0d050;box-shadow:0 0 20px var(--yellow-glow)}
+.hamburger{display:none;flex-direction:column;gap:4px;background:none;border:none;padding:4px;cursor:pointer}
+.hamburger span{width:20px;height:2px;background:var(--text2);border-radius:2px;display:block;transition:all 0.2s}
+.mobile-menu{display:none;position:fixed;top:62px;left:0;right:0;background:var(--surface);border-bottom:1px solid var(--border);padding:16px;z-index:199;flex-direction:column;gap:4px}
+.mobile-menu.open{display:flex}
+.mobile-menu a{color:var(--text2);font-size:0.9rem;padding:10px 14px;border-radius:6px;display:block}
+.mobile-menu a:hover{background:var(--surface2)}
+.mobile-menu-btns{display:flex;gap:8px;margin-top:8px}
+
+/* ══ HERO ══ */
+.hero{
+  min-height:100vh;
+  padding:120px 48px 80px;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:60px;
+  align-items:center;
+  max-width:1200px;
+  margin:0 auto;
+  position:relative;
+}
+.hero-left{position:relative;z-index:2}
+.hero-right{position:relative;z-index:2;display:flex;justify-content:center;align-items:center}
+
+/* Grain texture overlay */
+body::before{
+  content:'';position:fixed;inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.035'/%3E%3C/svg%3E");
+  pointer-events:none;z-index:0;opacity:1;
+}
+
+.hero-kicker{
+  display:inline-flex;align-items:center;gap:8px;
+  font-size:0.7rem;font-weight:600;color:var(--yellow);
+  letter-spacing:2px;text-transform:uppercase;
+  margin-bottom:24px;
+}
+.kicker-line{width:28px;height:1px;background:var(--yellow)}
+.hero-h1{
+  font-family:'Sora',sans-serif;
+  font-size:clamp(3rem,5vw,5rem);
+  font-weight:800;
+  line-height:0.98;
+  letter-spacing:-2.5px;
+  margin-bottom:24px;
+}
+.hero-h1 .line-accent{
+  color:var(--yellow);
+  position:relative;display:block;
+}
+.hero-h1 .line-normal{display:block;color:var(--text)}
+.hero-h1 .line-dim{display:block;color:var(--muted)}
+.hero-sub{
+  font-size:1rem;color:var(--text2);
+  line-height:1.8;margin-bottom:36px;
+  max-width:440px;font-weight:400;
+}
+.hero-sub strong{color:var(--text);font-weight:600}
+.hero-actions{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:48px}
+.btn-primary{
+  display:inline-flex;align-items:center;gap:7px;
+  background:var(--yellow);color:#0E0C0A;
+  padding:12px 24px;border-radius:8px;
+  font-weight:700;font-size:0.88rem;border:none;
+  transition:all 0.2s;font-family:'Sora',sans-serif;
+  letter-spacing:-0.2px;
+}
+.btn-primary:hover{background:#f0d050;box-shadow:0 8px 28px var(--yellow-glow);transform:translateY(-1px)}
+.btn-outline{
+  display:inline-flex;align-items:center;gap:7px;
+  background:transparent;color:var(--text2);
+  padding:12px 24px;border-radius:8px;
+  font-weight:500;font-size:0.88rem;
+  border:1px solid var(--border2);transition:all 0.15s;
+}
+.btn-outline:hover{border-color:var(--border3);background:var(--surface2);transform:translateY(-1px)}
+
+/* Stats row */
+.hero-stats{display:flex;gap:28px}
+.hstat{border-left:2px solid var(--border2);padding-left:20px}
+.hstat:first-child{border-left:none;padding-left:0}
+.hstat-num{font-family:'Sora',sans-serif;font-size:1.5rem;font-weight:800;color:var(--text);line-height:1}
+.hstat-label{font-size:0.7rem;color:var(--muted);margin-top:3px;text-transform:uppercase;letter-spacing:0.5px}
+
+/* ══ 3D ORBIT SCENE ══ */
+.orbit-scene{
+  width:380px;height:380px;
+  perspective:800px;
+  position:relative;
+}
+.orbit-center{
+  position:absolute;top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  width:80px;height:80px;
+  background:var(--surface2);
+  border:1px solid var(--yellow-border);
+  border-radius:16px;
+  display:flex;align-items:center;justify-content:center;
+  z-index:10;
+  box-shadow:0 0 40px var(--yellow-glow);
+}
+.orbit-ring{
+  position:absolute;top:50%;left:50%;
+  transform-style:preserve-3d;
+  animation:orbitRotate 18s linear infinite;
+}
+.orbit-ring-2{animation-duration:26s;animation-direction:reverse}
+.orbit-ring-3{animation-duration:14s}
+@keyframes orbitRotate{from{transform:translate(-50%,-50%) rotateX(65deg) rotateZ(0deg)}to{transform:translate(-50%,-50%) rotateX(65deg) rotateZ(360deg)}}
+.orbit-tag{
+  position:absolute;
+  white-space:nowrap;
+  font-size:0.72rem;font-weight:600;font-family:'Sora',sans-serif;
+  padding:5px 12px;border-radius:100px;
+  border:1px solid;
+  transform-style:preserve-3d;
+  backface-visibility:visible;
+  cursor:default;
+  transition:transform 0.2s;
+}
+.orbit-tag:hover{transform:scale(1.1) !important}
+.tag-yellow{background:var(--yellow-dim);border-color:var(--yellow-border);color:var(--yellow)}
+.tag-mint{background:var(--mint-dim);border-color:var(--mint-border);color:var(--mint)}
+.tag-orange{background:var(--orange-dim);border-color:rgba(232,93,38,0.3);color:var(--orange)}
+.tag-neutral{background:var(--surface2);border-color:var(--border2);color:var(--text2)}
+
+/* ══ FLIPPING SWAP CARD PAIR ══ */
+.flip-pair{
+  position:absolute;
+  bottom:20px;right:10px;
+  perspective:600px;
+  width:160px;height:100px;
+}
+.flip-card{
+  width:100%;height:100%;
+  transform-style:preserve-3d;
+  animation:cardFlip 4s ease-in-out infinite;
+  position:relative;
+}
+@keyframes cardFlip{
+  0%,35%{transform:rotateY(0deg)}
+  50%,85%{transform:rotateY(180deg)}
+  100%{transform:rotateY(360deg)}
+}
+.flip-front,.flip-back{
+  position:absolute;inset:0;
+  backface-visibility:hidden;
+  background:var(--surface2);
+  border:1px solid var(--border2);
+  border-radius:10px;padding:14px;
+  display:flex;flex-direction:column;justify-content:center;gap:6px;
+  box-shadow:0 8px 24px rgba(0,0,0,0.4);
+}
+.flip-back{transform:rotateY(180deg);background:var(--surface3);border-color:var(--yellow-border)}
+.flip-skill-label{font-size:0.6rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px;font-weight:600}
+.flip-skill-name{font-size:0.82rem;font-weight:700;font-family:'Sora',sans-serif;color:var(--text)}
+.flip-dot{width:6px;height:6px;border-radius:50%}
+
+/* ══ SECTION BASE ══ */
+.section{padding:88px 48px}
+.section-inner{max-width:1100px;margin:0 auto}
+.section-num{font-family:'Sora',sans-serif;font-size:4rem;font-weight:800;color:var(--surface3);line-height:1;margin-bottom:-8px;user-select:none;letter-spacing:-3px}
+.section-eyebrow{font-size:0.68rem;font-weight:700;color:var(--yellow);letter-spacing:2.5px;text-transform:uppercase;margin-bottom:10px;display:flex;align-items:center;gap:10px}
+.section-eyebrow::before{content:'';width:20px;height:1px;background:var(--yellow)}
+.section-title{font-family:'Sora',sans-serif;font-size:clamp(1.8rem,3.2vw,2.8rem);font-weight:800;letter-spacing:-1.2px;line-height:1.05;margin-bottom:14px}
+.section-sub{color:var(--text2);font-size:0.95rem;max-width:480px;line-height:1.8;margin-bottom:52px}
+
+/* ══ HOW IT WORKS ══ */
+.how-bg{background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.how-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:1px solid var(--border);border-radius:12px;overflow:hidden}
+.how-step{
+  padding:36px 28px;border-right:1px solid var(--border);
+  position:relative;transition:background 0.15s;
+  background:var(--surface);
+}
+.how-step:last-child{border-right:none}
+.how-step:hover{background:var(--surface2)}
+.step-number{
+  font-family:'Sora',sans-serif;font-size:3.5rem;font-weight:800;
+  color:var(--surface3);line-height:1;margin-bottom:20px;
+  letter-spacing:-3px;
+}
+.step-title{font-family:'Sora',sans-serif;font-size:1.05rem;font-weight:700;margin-bottom:8px}
+.step-body{font-size:0.84rem;color:var(--text2);line-height:1.75}
+
+/* ══ CATEGORIES ══ */
+.cats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.cat-card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:10px;padding:22px 18px;
+  transition:all 0.15s;cursor:pointer;
+}
+.cat-card:hover{border-color:var(--yellow-border);background:var(--yellow-dim);transform:translateY(-2px)}
+.cat-icon{font-size:1.5rem;margin-bottom:10px;display:block}
+.cat-name{font-family:'Sora',sans-serif;font-size:0.85rem;font-weight:700;margin-bottom:3px}
+.cat-count{font-size:0.72rem;color:var(--muted)}
+
+/* ══ BROWSE + SEARCH ══ */
+.search-block{
+  background:var(--surface);border:1px solid var(--border2);
+  border-radius:10px;padding:16px;margin-bottom:24px;
+}
+.search-row{display:flex;gap:10px;flex-wrap:wrap}
+.search-wrap{flex:1;min-width:200px;position:relative}
+.search-icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--muted);pointer-events:none;font-size:0.85rem}
+.search-input{
+  width:100%;background:var(--surface2);border:1px solid var(--border2);
+  border-radius:8px;padding:9px 12px 9px 34px;
+  color:var(--text);font-size:0.88rem;font-family:'Inter',sans-serif;
+  outline:none;transition:border-color 0.15s;
+}
+.search-input:focus{border-color:var(--yellow-border);box-shadow:0 0 0 3px var(--yellow-dim)}
+.search-input::placeholder{color:var(--muted2)}
+.search-select{
+  background:var(--surface2);border:1px solid var(--border2);
+  border-radius:8px;padding:9px 12px;
+  color:var(--text);font-size:0.84rem;font-family:'Inter',sans-serif;
+  outline:none;cursor:pointer;min-width:130px;
+}
+.search-select:focus{border-color:var(--yellow-border)}
+.search-select option{background:var(--surface2)}
+.filter-pills{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px;padding-top:12px;border-top:1px solid var(--border)}
+.filter-pill{
+  background:var(--surface2);border:1px solid var(--border);
+  border-radius:100px;padding:5px 14px;
+  font-size:0.76rem;color:var(--muted);font-weight:500;transition:all 0.15s;
+}
+.filter-pill:hover,.filter-pill.active{background:var(--yellow-dim);border-color:var(--yellow-border);color:var(--yellow)}
+
+/* ══ SKILL CARDS with 3D TILT ══ */
+.skills-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.skill-card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:12px;padding:22px;
+  cursor:pointer;position:relative;overflow:hidden;
+  transform-style:preserve-3d;
+  transition:box-shadow 0.15s,border-color 0.15s;
+  will-change:transform;
+}
+.skill-card:hover{border-color:var(--border2);box-shadow:0 20px 48px rgba(0,0,0,0.5)}
+/* shine layer */
+.card-shine{
+  position:absolute;inset:0;border-radius:12px;
+  background:radial-gradient(circle at 50% 50%, rgba(242,237,228,0.05), transparent 60%);
+  opacity:0;transition:opacity 0.2s;pointer-events:none;
+}
+.skill-card:hover .card-shine{opacity:1}
+.card-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px}
+.card-avatar{width:40px;height:40px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:0.78rem;font-weight:700;font-family:'Sora',sans-serif;flex-shrink:0}
+.card-badge{font-size:0.62rem;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;padding:3px 8px;border-radius:4px}
+.badge-open{background:var(--mint-dim);color:var(--mint);border:1px solid var(--mint-border)}
+.badge-hot{background:var(--orange-dim);color:var(--orange);border:1px solid rgba(232,93,38,0.25)}
+.card-name{font-weight:600;font-size:0.88rem;margin-bottom:2px;font-family:'Sora',sans-serif}
+.card-loc{font-size:0.73rem;color:var(--muted);margin-bottom:14px}
+.card-label{font-size:0.6rem;color:var(--muted2);letter-spacing:1.2px;text-transform:uppercase;margin-bottom:5px;font-weight:700}
+.skill-tag{
+  display:inline-flex;align-items:center;gap:4px;
+  background:var(--surface2);border:1px solid var(--border);
+  border-radius:5px;padding:4px 10px;font-size:0.75rem;
+  color:var(--text2);font-weight:500;margin-right:4px;margin-bottom:4px;
+}
+.skill-tag.offer{background:var(--yellow-dim);border-color:var(--yellow-border);color:var(--yellow)}
+.skill-tag.want{background:var(--mint-dim);border-color:var(--mint-border);color:var(--mint)}
+.card-divider{height:1px;background:var(--border);margin:14px 0}
+.card-footer{display:flex;justify-content:space-between;align-items:center}
+.card-rating{display:flex;align-items:center;gap:5px;font-size:0.76rem;color:var(--muted)}
+.stars{color:var(--yellow);font-size:0.74rem}
+.card-btn{background:var(--yellow);color:#0E0C0A;border:none;border-radius:6px;padding:6px 14px;font-size:0.74rem;font-weight:700;font-family:'Sora',sans-serif;transition:all 0.15s}
+.card-btn:hover{background:#f0d050}
+
+/* ══ TESTIMONIALS ══ */
+.testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.testi-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:26px;position:relative}
+.testi-quote{font-family:'Sora',sans-serif;font-size:3rem;color:var(--yellow);line-height:0.8;margin-bottom:14px;opacity:0.6}
+.testi-text{font-size:0.875rem;color:var(--text2);line-height:1.78;margin-bottom:20px}
+.testi-author{display:flex;align-items:center;gap:10px;padding-top:16px;border-top:1px solid var(--border)}
+.testi-avatar{width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:0.72rem;font-weight:700;font-family:'Sora',sans-serif;flex-shrink:0}
+.testi-name{font-weight:700;font-size:0.84rem;font-family:'Sora',sans-serif}
+.testi-role{font-size:0.72rem;color:var(--muted)}
+.testi-swap{display:inline-flex;align-items:center;gap:4px;background:var(--yellow-dim);border:1px solid var(--yellow-border);border-radius:4px;padding:2px 8px;font-size:0.67rem;color:var(--yellow);font-weight:600;margin-top:10px}
+
+/* ══ POST FORM ══ */
+.post-grid{display:grid;grid-template-columns:1fr 360px;gap:44px;align-items:start}
+.post-form{display:flex;flex-direction:column;gap:14px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.form-group{display:flex;flex-direction:column;gap:6px}
+label{font-size:0.73rem;font-weight:600;color:var(--muted);letter-spacing:0.3px}
+input,select,textarea{
+  background:var(--surface2);border:1px solid var(--border2);
+  border-radius:8px;padding:10px 14px;
+  color:var(--text);font-size:0.88rem;font-family:'Inter',sans-serif;
+  transition:border-color 0.15s;outline:none;
+}
+input:focus,select:focus,textarea:focus{border-color:var(--yellow-border);box-shadow:0 0 0 3px var(--yellow-dim)}
+input::placeholder,textarea::placeholder{color:var(--muted2)}
+select option{background:var(--surface2)}
+textarea{resize:vertical;min-height:90px}
+.submit-btn{background:var(--yellow);color:#0E0C0A;border:none;border-radius:8px;padding:12px;font-size:0.9rem;font-weight:700;font-family:'Sora',sans-serif;transition:all 0.15s}
+.submit-btn:hover{background:#f0d050;box-shadow:0 8px 24px var(--yellow-glow)}
+.post-sidebar{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:28px;position:sticky;top:76px}
+.sidebar-title{font-family:'Sora',sans-serif;font-size:1rem;font-weight:700;margin-bottom:6px}
+.sidebar-sub{font-size:0.82rem;color:var(--muted);line-height:1.6;margin-bottom:22px}
+.tip-list{display:flex;flex-direction:column;gap:14px}
+.tip{display:flex;gap:10px;align-items:flex-start}
+.tip-icon{width:28px;height:28px;border-radius:6px;background:var(--yellow-dim);border:1px solid var(--yellow-border);display:flex;align-items:center;justify-content:center;font-size:0.85rem;flex-shrink:0}
+.tip-text{font-size:0.81rem;color:var(--text2);line-height:1.6}
+.tip-text strong{color:var(--text)}
+
+/* ══ CTA ══ */
+.cta-wrap{padding:0 48px 88px}
+.cta-inner{
+  max-width:1100px;margin:0 auto;
+  background:var(--yellow);border-radius:14px;
+  padding:60px;display:flex;justify-content:space-between;align-items:center;gap:40px;
+  position:relative;overflow:hidden;
+}
+.cta-inner::before{
+  content:'';position:absolute;top:-60px;right:-40px;
+  width:300px;height:300px;border-radius:50%;
+  background:rgba(255,255,255,0.08);
+}
+.cta-title{font-family:'Sora',sans-serif;font-size:clamp(1.7rem,3vw,2.6rem);font-weight:800;letter-spacing:-1px;color:#0E0C0A;line-height:1.1;margin-bottom:8px}
+.cta-sub{color:rgba(14,12,10,0.6);font-size:0.95rem;max-width:380px;line-height:1.7}
+.btn-cta-dark{background:#0E0C0A;color:var(--yellow);border:none;border-radius:8px;padding:14px 28px;font-size:0.9rem;font-weight:700;font-family:'Sora',sans-serif;white-space:nowrap;transition:all 0.15s;flex-shrink:0;position:relative;z-index:1}
+.btn-cta-dark:hover{background:#1A1612;box-shadow:0 8px 24px rgba(0,0,0,0.3);transform:translateY(-1px)}
+
+/* ══ FOOTER ══ */
+footer{padding:40px 48px;border-top:1px solid var(--border)}
+.footer-inner{max-width:1100px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}
+.footer-logo{display:flex;align-items:center;gap:8px;font-family:'Sora',sans-serif;font-weight:800;font-size:1rem}
+.footer-links{display:flex;gap:20px}
+.footer-links a{font-size:0.78rem;color:var(--muted);transition:color 0.15s}
+.footer-links a:hover{color:var(--text2)}
+.footer-copy{font-size:0.76rem;color:var(--muted2)}
+
+/* ══ MODAL ══ */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.8);backdrop-filter:blur(8px);z-index:500;display:none;align-items:center;justify-content:center;padding:20px}
+.modal-overlay.open{display:flex}
+.modal{background:var(--surface);border:1px solid var(--border2);border-radius:14px;padding:36px;max-width:480px;width:100%;position:relative;animation:modalIn 0.25s ease;box-shadow:0 24px 64px rgba(0,0,0,0.6)}
+@keyframes modalIn{from{opacity:0;transform:scale(0.96) translateY(10px)}to{opacity:1;transform:none}}
+.modal-close{position:absolute;top:14px;right:14px;width:30px;height:30px;border-radius:6px;background:var(--surface2);border:1px solid var(--border);color:var(--muted);font-size:0.9rem;display:flex;align-items:center;justify-content:center;transition:all 0.15s}
+.modal-close:hover{background:var(--surface3);color:var(--text)}
+.modal-title{font-family:'Sora',sans-serif;font-size:1.3rem;font-weight:800;letter-spacing:-0.3px;margin-bottom:4px}
+.modal-sub{color:var(--muted);font-size:0.84rem;margin-bottom:22px}
+.modal-form{display:flex;flex-direction:column;gap:12px}
+.swap-match-row{background:var(--surface2);border:1px solid var(--yellow-border);border-radius:8px;padding:14px;display:flex;align-items:center;gap:10px;font-size:0.84rem;margin-bottom:4px;flex-wrap:wrap}
+.match-skill{background:var(--yellow-dim);border:1px solid var(--yellow-border);border-radius:4px;padding:2px 10px;color:var(--yellow);font-size:0.76rem;font-weight:600}
+.match-skill.mint{background:var(--mint-dim);border-color:var(--mint-border);color:var(--mint)}
+
+/* ══ PROFILE MODAL ══ */
+.profile-modal{max-width:540px}
+.pm-header{display:flex;align-items:center;gap:14px;margin-bottom:18px}
+.pm-avatar{width:60px;height:60px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;font-weight:700;font-family:'Sora',sans-serif;flex-shrink:0}
+.pm-name{font-family:'Sora',sans-serif;font-size:1.15rem;font-weight:800;margin-bottom:2px}
+.pm-location{font-size:0.8rem;color:var(--muted);margin-bottom:5px}
+.pm-bio{font-size:0.84rem;color:var(--text2);line-height:1.7;margin-bottom:18px;padding-bottom:18px;border-bottom:1px solid var(--border)}
+.pm-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:18px}
+.pm-stat{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:12px;text-align:center}
+.pm-stat-num{font-family:'Sora',sans-serif;font-size:1.3rem;font-weight:800}
+.pm-stat-label{font-size:0.64rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;margin-top:2px}
+.pm-section-label{font-size:0.62rem;font-weight:700;color:var(--muted2);letter-spacing:1.2px;text-transform:uppercase;margin-bottom:7px}
+.pm-skills-row{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:16px}
+.pm-actions{display:flex;gap:8px;margin-top:4px}
+
+/* ══ DASHBOARD ══ */
+.dash-overlay{position:fixed;inset:0;background:var(--bg);z-index:300;overflow-y:auto;display:none}
+.dash-overlay.open{display:block}
+.dash-topbar{display:flex;justify-content:space-between;align-items:center;padding:0 40px;height:62px;border-bottom:1px solid var(--border);background:var(--surface);position:sticky;top:0;z-index:10}
+.dash-topbar-logo{display:flex;align-items:center;gap:8px;font-family:'Sora',sans-serif;font-size:1rem;font-weight:800}
+.dash-back{background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:6px 14px;color:var(--text2);font-size:0.8rem;font-weight:500;transition:all 0.15s}
+.dash-back:hover{background:var(--surface3)}
+.dash-body{max-width:1080px;margin:0 auto;padding:36px 40px}
+.dash-profile-card{display:flex;align-items:center;gap:18px;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:22px 24px;margin-bottom:28px}
+.dash-profile-avatar{width:52px;height:52px;border-radius:10px;background:var(--yellow-dim);border:1px solid var(--yellow-border);display:flex;align-items:center;justify-content:center;font-size:1.1rem;font-weight:800;font-family:'Sora',sans-serif;color:var(--yellow)}
+.dash-profile-name{font-family:'Sora',sans-serif;font-size:1.05rem;font-weight:800}
+.dash-profile-handle{font-size:0.76rem;color:var(--muted);margin-top:2px}
+.dash-kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:28px}
+.kpi-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:20px}
+.kpi-num{font-family:'Sora',sans-serif;font-size:1.9rem;font-weight:800;line-height:1}
+.kpi-label{font-size:0.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;margin-top:4px}
+.kpi-sub{font-size:0.7rem;color:var(--mint);margin-top:5px;font-weight:500}
+.dash-two-col{display:grid;grid-template-columns:1fr 320px;gap:18px}
+.dash-panel{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:20px;margin-bottom:14px}
+.dash-panel-title{font-family:'Sora',sans-serif;font-size:0.9rem;font-weight:700;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between}
+.dash-count{font-size:0.68rem;background:var(--surface2);border:1px solid var(--border);border-radius:100px;padding:2px 8px;color:var(--muted);font-weight:500}
+.dash-tabs{display:flex;gap:2px;background:var(--surface2);border-radius:6px;padding:3px;margin-bottom:16px}
+.dash-tab{flex:1;padding:6px 8px;border-radius:4px;font-size:0.75rem;font-weight:600;border:none;background:transparent;color:var(--muted);transition:all 0.15s;font-family:'Sora',sans-serif}
+.dash-tab.active{background:var(--surface);color:var(--text);box-shadow:0 1px 3px rgba(0,0,0,0.3)}
+.req-item{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid var(--border)}
+.req-item:last-child{border-bottom:none}
+.req-av{width:34px;height:34px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:0.7rem;font-weight:700;font-family:'Sora',sans-serif;flex-shrink:0}
+.req-name{font-size:0.83rem;font-weight:600;font-family:'Sora',sans-serif}
+.req-skill{font-size:0.72rem;color:var(--muted)}
+.req-actions{display:flex;gap:5px;margin-left:auto;flex-shrink:0}
+.btn-accept{background:var(--mint-dim);border:1px solid var(--mint-border);color:var(--mint);border-radius:5px;padding:4px 10px;font-size:0.7rem;font-weight:600;transition:all 0.15s}
+.btn-accept:hover{background:var(--mint);color:#0E0C0A}
+.btn-decline{background:var(--orange-dim);border:1px solid rgba(232,93,38,0.25);color:var(--orange);border-radius:5px;padding:4px 10px;font-size:0.7rem;font-weight:600;transition:all 0.15s}
+.btn-decline:hover{background:var(--orange);color:#fff}
+.req-status{font-size:0.65rem;font-weight:700;padding:2px 8px;border-radius:4px;white-space:nowrap}
+.status-active{background:var(--mint-dim);color:var(--mint);border:1px solid var(--mint-border)}
+.status-done{background:var(--surface2);color:var(--muted);border:1px solid var(--border)}
+.notif-item{display:flex;gap:10px;padding:11px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;margin-bottom:7px}
+.notif-icon{width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:0.8rem;flex-shrink:0}
+.notif-text{font-size:0.78rem;color:var(--text2);line-height:1.5}
+.notif-time{font-size:0.65rem;color:var(--muted);margin-top:2px}
+.notif-unread{background:var(--yellow-dim);border-color:var(--yellow-border)}
+.skill-item{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:7px;margin-bottom:8px}
+.skill-item-name{font-size:0.83rem;font-weight:600;font-family:'Sora',sans-serif}
+.skill-badge{font-size:0.62rem;font-weight:700;padding:2px 8px;border-radius:4px;text-transform:uppercase;letter-spacing:0.3px}
+.sbadge-offer{background:var(--yellow-dim);color:var(--yellow);border:1px solid var(--yellow-border)}
+.sbadge-learn{background:var(--mint-dim);color:var(--mint);border:1px solid var(--mint-border)}
+
+/* ══ TOAST ══ */
+.toast{position:fixed;bottom:24px;right:24px;z-index:999;background:var(--surface);color:var(--text);border:1px solid var(--border2);border-radius:8px;padding:12px 18px;font-weight:500;font-size:0.84rem;display:flex;align-items:center;gap:10px;transform:translateY(80px);opacity:0;transition:all 0.3s cubic-bezier(0.34,1.3,0.64,1);pointer-events:none;box-shadow:0 8px 32px rgba(0,0,0,0.4);max-width:300px}
+.toast.show{transform:translateY(0);opacity:1}
+
+/* ══ REVEAL ══ */
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+.reveal{opacity:0;transform:translateY(20px);transition:opacity 0.55s ease,transform 0.55s ease}
+.reveal.visible{opacity:1;transform:none}
+.rd1{transition-delay:0.07s}.rd2{transition-delay:0.14s}.rd3{transition-delay:0.21s}
+.hero-left > *{animation:fadeUp 0.55s ease both}
+.hero-left > *:nth-child(1){animation-delay:0s}
+.hero-left > *:nth-child(2){animation-delay:0.08s}
+.hero-left > *:nth-child(3){animation-delay:0.16s}
+.hero-left > *:nth-child(4){animation-delay:0.24s}
+.hero-left > *:nth-child(5){animation-delay:0.32s}
+
+/* ══ RESPONSIVE ══ */
+@media(max-width:1024px){
+  nav,footer,section.section,.section,cta-wrap{padding-left:24px;padding-right:24px}
+  .hero{grid-template-columns:1fr;padding:100px 24px 60px;gap:40px}
+  .hero-right{display:none}
+  .skills-grid{grid-template-columns:repeat(2,1fr)}
+  .cats-grid{grid-template-columns:repeat(2,1fr)}
+  .how-steps{grid-template-columns:1fr}
+  .how-step{border-right:none;border-bottom:1px solid var(--border)}
+  .how-step:last-child{border-bottom:none}
+  .post-grid{grid-template-columns:1fr}
+  .post-sidebar{position:static}
+  .testi-grid{grid-template-columns:1fr}
+  .cta-wrap{padding-left:24px;padding-right:24px}
+  .cta-inner{flex-direction:column;text-align:center;padding:40px 24px}
+  .dash-two-col{grid-template-columns:1fr}
+  .dash-kpi-row{grid-template-columns:repeat(2,1fr)}
+  .dash-topbar,.dash-body{padding-left:20px;padding-right:20px}
+  .footer-inner{flex-direction:column;text-align:center}
+  .footer-links{justify-content:center}
+}
+@media(max-width:640px){
+  .nav-links,.btn-nav-ghost{display:none}
+  .hamburger{display:flex}
+  .skills-grid{grid-template-columns:1fr}
+  .form-row{grid-template-columns:1fr}
+  .dash-kpi-row{grid-template-columns:repeat(2,1fr)}
+  nav,footer{padding-left:16px;padding-right:16px}
+}
+</style>
+</head>
+<body>
+
+<!-- ══ NAV ══ -->
+<nav id="navbar">
+  <div class="logo">
+    <!-- SVG Logo Mark -->
+    <div class="logo-mark">
+      <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="32" height="32" rx="8" fill="#E8C547" fill-opacity="0.12"/>
+        <path d="M8 12C8 10.8954 8.89543 10 10 10H16C18.2091 10 20 11.7909 20 14C20 16.2091 18.2091 18 16 18H10C8.89543 18 8 17.1046 8 16V12Z" fill="#E8C547" fill-opacity="0.3"/>
+        <path d="M20 14L24 10M24 10H20M24 10V14" stroke="#E8C547" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M12 18L8 22M8 22H12M8 22V18" stroke="#4ECBA4" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="16" cy="16" r="2.5" fill="#E8C547"/>
+      </svg>
+    </div>
+    <span class="logo-text">Skill<em>Swap</em></span>
+  </div>
+  <ul class="nav-links">
+    <li><a href="#how">How it Works</a></li>
+    <li><a href="#browse">Browse</a></li>
+    <li><a href="#post">Post a Swap</a></li>
+    <li><a href="#stories">Stories</a></li>
+  </ul>
+  <div class="nav-right">
+    <button class="btn-nav-ghost" onclick="openModal('login')">Log in</button>
+    <button class="btn-nav-primary" onclick="openDashboard()">Dashboard</button>
+    <button class="hamburger" id="hamburger" onclick="toggleMobileMenu()">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#how" onclick="closeMobileMenu()">How it Works</a>
+  <a href="#browse" onclick="closeMobileMenu()">Browse Skills</a>
+  <a href="#post" onclick="closeMobileMenu()">Post a Swap</a>
+  <a href="#stories" onclick="closeMobileMenu()">Stories</a>
+  <div class="mobile-menu-btns">
+    <button class="btn-nav-ghost" style="flex:1" onclick="openModal('login');closeMobileMenu()">Log in</button>
+    <button class="btn-nav-primary" style="flex:1" onclick="openDashboard();closeMobileMenu()">Dashboard</button>
+  </div>
+</div>
+
+<!-- ══ HERO ══ -->
+<section style="padding-top:62px">
+<div class="hero">
+  <div class="hero-left">
+    <div class="hero-kicker"><span class="kicker-line"></span>Pakistan's Skill Exchange</div>
+    <h1 class="hero-h1">
+      <span class="line-dim">You know</span>
+      <span class="line-accent">something.</span>
+      <span class="line-normal">They know</span>
+      <span class="line-accent">everything.</span>
+    </h1>
+    <p class="hero-sub">Stop paying for courses. Start trading skills. <strong>Figma for Python. Photography for SEO. Design for Code.</strong> Real exchange. Zero rupees.</p>
+    <div class="hero-actions">
+      <button class="btn-primary" onclick="document.getElementById('browse').scrollIntoView({behavior:'smooth'})">Find a Swap →</button>
+      <button class="btn-outline" onclick="document.getElementById('post').scrollIntoView({behavior:'smooth'})">Post Your Skill</button>
+    </div>
+    <div class="hero-stats">
+      <div class="hstat">
+        <div class="hstat-num" id="counter1">0</div>
+        <div class="hstat-label">Swappers</div>
+      </div>
+      <div class="hstat">
+        <div class="hstat-num" id="counter2">0</div>
+        <div class="hstat-label">Skills Listed</div>
+      </div>
+      <div class="hstat">
+        <div class="hstat-num" id="counter3">0</div>
+        <div class="hstat-label">Swaps Done</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3D Orbit -->
+  <div class="hero-right">
+    <div class="orbit-scene" id="orbitScene">
+      <!-- Center logo -->
+      <div class="orbit-center">
+        <svg viewBox="0 0 32 32" fill="none" width="40" height="40">
+          <path d="M8 12C8 10.8954 8.89543 10 10 10H16C18.2091 10 20 11.7909 20 14C20 16.2091 18.2091 18 16 18H10C8.89543 18 8 17.1046 8 16V12Z" fill="#E8C547" fill-opacity="0.3"/>
+          <path d="M20 14L24 10M24 10H20M24 10V14" stroke="#E8C547" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M12 18L8 22M8 22H12M8 22V18" stroke="#4ECBA4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="16" cy="16" r="2.5" fill="#E8C547"/>
+        </svg>
+      </div>
+      <!-- Orbit rings get populated by JS -->
+      <div class="orbit-ring" id="ring1"></div>
+      <div class="orbit-ring orbit-ring-2" id="ring2"></div>
+      <div class="orbit-ring orbit-ring-3" id="ring3"></div>
+
+      <!-- Flipping card pair -->
+      <div class="flip-pair">
+        <div class="flip-card">
+          <div class="flip-front">
+            <div class="flip-skill-label">Offering</div>
+            <div class="flip-dot" style="background:var(--yellow)"></div>
+            <div class="flip-skill-name">Figma UI/UX</div>
+          </div>
+          <div class="flip-back">
+            <div class="flip-skill-label">Receiving</div>
+            <div class="flip-dot" style="background:var(--mint)"></div>
+            <div class="flip-skill-name">Python Backend</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ══ HOW IT WORKS ══ -->
+<section class="section how-bg" id="how">
+  <div class="section-inner">
+    <div class="section-eyebrow reveal">How it works</div>
+    <h2 class="section-title reveal">Three steps.<br/>One swap.</h2>
+    <p class="section-sub reveal">No interviews, no payments, no middleman. Just two people who want what the other knows.</p>
+    <div class="how-steps reveal">
+      <div class="how-step">
+        <div class="step-number">01</div>
+        <div class="step-title">List what you know</div>
+        <div class="step-body">Post the skill you can teach and what you want to learn back. Be specific — "React hooks for beginners" beats just "programming."</div>
+      </div>
+      <div class="how-step">
+        <div class="step-number">02</div>
+        <div class="step-title">Find your match</div>
+        <div class="step-body">Search by skill, city, or level. When someone's offer matches your want, send a swap request with a short message.</div>
+      </div>
+      <div class="how-step">
+        <div class="step-number">03</div>
+        <div class="step-title">Learn together</div>
+        <div class="step-body">Set a schedule, meet on video or chat, and start teaching each other. Rate your swap — your rating is your reputation here.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ CATEGORIES ══ -->
+<section class="section" id="categories">
+  <div class="section-inner">
+    <div class="section-eyebrow reveal">Explore</div>
+    <h2 class="section-title reveal">Every skill has a match.</h2>
+    <p class="section-sub reveal">Browse by what you want to learn — or what you want to teach.</p>
+    <div class="cats-grid reveal">
+      <div class="cat-card" onclick="filterSkills('Design');document.getElementById('browse').scrollIntoView({behavior:'smooth'})">
+        <span class="cat-icon">🎨</span><div class="cat-name">Design & UI/UX</div><div class="cat-count">84 listings</div>
+      </div>
+      <div class="cat-card" onclick="filterSkills('Code');document.getElementById('browse').scrollIntoView({behavior:'smooth'})">
+        <span class="cat-icon">💻</span><div class="cat-name">Programming</div><div class="cat-count">127 listings</div>
+      </div>
+      <div class="cat-card" onclick="filterSkills('Marketing');document.getElementById('browse').scrollIntoView({behavior:'smooth'})">
+        <span class="cat-icon">📢</span><div class="cat-name">Marketing & SEO</div><div class="cat-count">56 listings</div>
+      </div>
+      <div class="cat-card" onclick="filterSkills('Language');document.getElementById('browse').scrollIntoView({behavior:'smooth'})">
+        <span class="cat-icon">🌍</span><div class="cat-name">Languages</div><div class="cat-count">43 listings</div>
+      </div>
+      <div class="cat-card" onclick="filterSkills('Video');document.getElementById('browse').scrollIntoView({behavior:'smooth'})">
+        <span class="cat-icon">🎬</span><div class="cat-name">Video & Editing</div><div class="cat-count">38 listings</div>
+      </div>
+      <div class="cat-card" onclick="filterSkills('Business');document.getElementById('browse').scrollIntoView({behavior:'smooth'})">
+        <span class="cat-icon">📊</span><div class="cat-name">Business & Finance</div><div class="cat-count">31 listings</div>
+      </div>
+      <div class="cat-card" onclick="filterSkills('Music');document.getElementById('browse').scrollIntoView({behavior:'smooth'})">
+        <span class="cat-icon">🎵</span><div class="cat-name">Music & Audio</div><div class="cat-count">22 listings</div>
+      </div>
+      <div class="cat-card" onclick="filterSkills('Writing');document.getElementById('browse').scrollIntoView({behavior:'smooth'})">
+        <span class="cat-icon">✍️</span><div class="cat-name">Writing & Content</div><div class="cat-count">19 listings</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ BROWSE ══ -->
+<section class="section" style="background:var(--surface);border-top:1px solid var(--border)" id="browse">
+  <div class="section-inner">
+    <div class="section-eyebrow reveal">Browse</div>
+    <h2 class="section-title reveal">Live swap listings.</h2>
+    <p class="section-sub reveal">Real people. Real skills. Click any card to see their full profile.</p>
+    <div class="search-block reveal">
+      <div class="search-row">
+        <div class="search-wrap">
+          <span class="search-icon">🔍</span>
+          <input class="search-input" type="text" id="searchInput" placeholder="Search skills, names, cities..." oninput="applyFilters()"/>
+        </div>
+        <select class="search-select" id="levelFilter" onchange="applyFilters()">
+          <option value="">All Levels</option>
+          <option value="beginner">Beginner</option>
+          <option value="intermediate">Intermediate</option>
+          <option value="advanced">Advanced</option>
+        </select>
+        <select class="search-select" id="cityFilter" onchange="applyFilters()">
+          <option value="">All Cities</option>
+          <option value="lahore">Lahore</option>
+          <option value="karachi">Karachi</option>
+          <option value="islamabad">Islamabad</option>
+          <option value="multan">Multan</option>
+          <option value="peshawar">Peshawar</option>
+          <option value="faisalabad">Faisalabad</option>
+        </select>
+      </div>
+      <div class="filter-pills">
+        <button class="filter-pill active" onclick="filterSkills('All')">All</button>
+        <button class="filter-pill" onclick="filterSkills('Design')">🎨 Design</button>
+        <button class="filter-pill" onclick="filterSkills('Code')">💻 Code</button>
+        <button class="filter-pill" onclick="filterSkills('Marketing')">📢 Marketing</button>
+        <button class="filter-pill" onclick="filterSkills('Language')">🌍 Language</button>
+        <button class="filter-pill" onclick="filterSkills('Video')">🎬 Video</button>
+        <button class="filter-pill" onclick="filterSkills('Business')">📊 Business</button>
+      </div>
+    </div>
+
+    <div class="skills-grid" id="skillsGrid">
+      <div class="skill-card" data-cat="Design" data-city="multan" data-name="taha jaffar" data-skills="figma ui ux srs python flask django" data-level="intermediate">
+        <div class="card-shine"></div>
+        <div class="card-top"><div class="card-avatar" style="background:rgba(232,197,71,0.15);color:var(--yellow)">TJ</div><span class="card-badge badge-hot">🔥 Hot</span></div>
+        <div class="card-name">Taha Jaffar</div><div class="card-loc">📍 Multan · Intermediate</div>
+        <div class="card-label">Offering</div>
+        <div style="margin-bottom:10px"><span class="skill-tag offer">🎨 Figma UI/UX</span><span class="skill-tag offer">📋 SRS Docs</span></div>
+        <div class="card-label">Wants</div>
+        <div><span class="skill-tag want">🐍 Python</span><span class="skill-tag want">⚡ Flask/Django</span></div>
+        <div class="card-divider"></div>
+        <div class="card-footer">
+          <div class="card-rating"><span class="stars">★★★★★</span> <span>5.0 · New</span></div>
+          <button class="card-btn" onclick="openProfile('Taha Jaffar','TJ','Multan','rgba(232,197,71,0.15)','var(--yellow)','UI/UX designer passionate about clean interfaces. Currently learning backend.','Figma UI/UX,SRS Docs','Python,Flask/Django',5.0,0,3)">View →</button>
+        </div>
+      </div>
+
+      <div class="skill-card" data-cat="Code" data-city="lahore" data-name="ali khan" data-skills="react javascript figma ui" data-level="advanced">
+        <div class="card-shine"></div>
+        <div class="card-top"><div class="card-avatar" style="background:rgba(124,92,252,0.15);color:#a78bfa">AK</div><span class="card-badge badge-open">✓ Open</span></div>
+        <div class="card-name">Ali Khan</div><div class="card-loc">📍 Lahore · Advanced</div>
+        <div class="card-label">Offering</div>
+        <div style="margin-bottom:10px"><span class="skill-tag offer">⚛️ React.js</span><span class="skill-tag offer">🟨 JavaScript</span></div>
+        <div class="card-label">Wants</div>
+        <div><span class="skill-tag want">🎨 Figma</span><span class="skill-tag want">🖌️ UI Principles</span></div>
+        <div class="card-divider"></div>
+        <div class="card-footer">
+          <div class="card-rating"><span class="stars">★★★★☆</span> <span>4.8 · 12 swaps</span></div>
+          <button class="card-btn" onclick="openProfile('Ali Khan','AK','Lahore','rgba(124,92,252,0.15)','#a78bfa','Frontend developer with 3 years of React. Wants to improve his design eye.','React.js,JavaScript','Figma,UI Principles',4.8,12,28)">View →</button>
+        </div>
+      </div>
+
+      <div class="skill-card" data-cat="Marketing" data-city="karachi" data-name="sara ahmed" data-skills="seo content writing excel data analysis" data-level="advanced">
+        <div class="card-shine"></div>
+        <div class="card-top"><div class="card-avatar" style="background:rgba(232,93,38,0.15);color:var(--orange)">SA</div><span class="card-badge badge-open">✓ Open</span></div>
+        <div class="card-name">Sara Ahmed</div><div class="card-loc">📍 Karachi · Advanced</div>
+        <div class="card-label">Offering</div>
+        <div style="margin-bottom:10px"><span class="skill-tag offer">📢 SEO Strategy</span><span class="skill-tag offer">📝 Content Writing</span></div>
+        <div class="card-label">Wants</div>
+        <div><span class="skill-tag want">📊 Excel</span><span class="skill-tag want">📈 Data Analysis</span></div>
+        <div class="card-divider"></div>
+        <div class="card-footer">
+          <div class="card-rating"><span class="stars">★★★★★</span> <span>4.9 · 8 swaps</span></div>
+          <button class="card-btn" onclick="openProfile('Sara Ahmed','SA','Karachi','rgba(232,93,38,0.15)','var(--orange)','SEO specialist who grew 3 blogs to 50k monthly visitors. Adding data skills.','SEO Strategy,Content Writing','Excel,Data Analysis',4.9,8,21)">View →</button>
+        </div>
+      </div>
+
+      <div class="skill-card" data-cat="Video" data-city="islamabad" data-name="omar malik" data-skills="video editing after effects python automation" data-level="advanced">
+        <div class="card-shine"></div>
+        <div class="card-top"><div class="card-avatar" style="background:rgba(78,203,164,0.15);color:var(--mint)">OM</div><span class="card-badge badge-hot">🔥 Hot</span></div>
+        <div class="card-name">Omar Malik</div><div class="card-loc">📍 Islamabad · Advanced</div>
+        <div class="card-label">Offering</div>
+        <div style="margin-bottom:10px"><span class="skill-tag offer">🎬 Video Editing</span><span class="skill-tag offer">🎞️ After Effects</span></div>
+        <div class="card-label">Wants</div>
+        <div><span class="skill-tag want">🐍 Python</span><span class="skill-tag want">🤖 Automation</span></div>
+        <div class="card-divider"></div>
+        <div class="card-footer">
+          <div class="card-rating"><span class="stars">★★★★★</span> <span>5.0 · 3 swaps</span></div>
+          <button class="card-btn" onclick="openProfile('Omar Malik','OM','Islamabad','rgba(78,203,164,0.15)','var(--mint)','Content creator with 50k YouTube subscribers. Editing tutorials for 4 years.','Video Editing,After Effects','Python,Automation',5.0,3,9)">View →</button>
+        </div>
+      </div>
+
+      <div class="skill-card" data-cat="Language" data-city="faisalabad" data-name="zara rauf" data-skills="ielts english writing mobile ui canva" data-level="intermediate">
+        <div class="card-shine"></div>
+        <div class="card-top"><div class="card-avatar" style="background:rgba(232,197,71,0.15);color:var(--yellow)">ZR</div><span class="card-badge badge-open">✓ Open</span></div>
+        <div class="card-name">Zara Rauf</div><div class="card-loc">📍 Faisalabad · Intermediate</div>
+        <div class="card-label">Offering</div>
+        <div style="margin-bottom:10px"><span class="skill-tag offer">🌍 IELTS Prep</span><span class="skill-tag offer">✍️ English Writing</span></div>
+        <div class="card-label">Wants</div>
+        <div><span class="skill-tag want">📱 Mobile UI</span><span class="skill-tag want">🎨 Canva</span></div>
+        <div class="card-divider"></div>
+        <div class="card-footer">
+          <div class="card-rating"><span class="stars">★★★★☆</span> <span>4.7 · 15 swaps</span></div>
+          <button class="card-btn" onclick="openProfile('Zara Rauf','ZR','Faisalabad','rgba(232,197,71,0.15)','var(--yellow)','IELTS instructor who scored 8.5. Helped 30+ students reach target bands.','IELTS Prep,English Writing','Mobile UI,Canva',4.7,15,34)">View →</button>
+        </div>
+      </div>
+
+      <div class="skill-card" data-cat="Code" data-city="peshawar" data-name="hamza baig" data-skills="django rest postgresql aws docker" data-level="advanced">
+        <div class="card-shine"></div>
+        <div class="card-top"><div class="card-avatar" style="background:rgba(232,197,71,0.12);color:var(--yellow)">HB</div><span class="card-badge badge-open">✓ Open</span></div>
+        <div class="card-name">Hamza Baig</div><div class="card-loc">📍 Peshawar · Advanced</div>
+        <div class="card-label">Offering</div>
+        <div style="margin-bottom:10px"><span class="skill-tag offer">🐍 Django REST</span><span class="skill-tag offer">🗄️ PostgreSQL</span></div>
+        <div class="card-label">Wants</div>
+        <div><span class="skill-tag want">☁️ AWS Basics</span><span class="skill-tag want">🐳 Docker</span></div>
+        <div class="card-divider"></div>
+        <div class="card-footer">
+          <div class="card-rating"><span class="stars">★★★★★</span> <span>4.9 · 6 swaps</span></div>
+          <button class="card-btn" onclick="openProfile('Hamza Baig','HB','Peshawar','rgba(232,197,71,0.12)','var(--yellow)','Backend dev specializing in Django APIs. Built 5+ production apps. Learning DevOps.','Django REST,PostgreSQL','AWS Basics,Docker',4.9,6,18)">View →</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="noResults" style="display:none;text-align:center;padding:48px;color:var(--muted)">
+      <div style="font-size:2rem;margin-bottom:10px">🔍</div>
+      <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:1rem;color:var(--text2);margin-bottom:4px">No matches found</div>
+      <div style="font-size:0.83rem">Try different keywords or clear the filters.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ STORIES ══ -->
+<section class="section" id="stories">
+  <div class="section-inner">
+    <div class="section-eyebrow reveal">Stories</div>
+    <h2 class="section-title reveal">Real swaps. Real results.</h2>
+    <p class="section-sub reveal">No fluff. Just what happened after the swap.</p>
+    <div class="testi-grid">
+      <div class="testi-card reveal">
+        <div class="testi-quote">"</div>
+        <p class="testi-text">Taught React for 4 sessions, got Figma fundamentals back. Now I understand why designers make the choices they do. Shipped a better product because of it.</p>
+        <div class="testi-author">
+          <div class="testi-avatar" style="background:rgba(124,92,252,0.15);color:#a78bfa">AK</div>
+          <div><div class="testi-name">Ali Khan</div><div class="testi-role">Frontend Dev · Lahore</div></div>
+        </div>
+        <div class="testi-swap">React.js ↔ Figma Design</div>
+      </div>
+      <div class="testi-card reveal rd1">
+        <div class="testi-quote">"</div>
+        <p class="testi-text">Was about to pay Rs. 15,000 for an SEO course. Found someone who needed Excel help — taught spreadsheets, got SEO back. Blog traffic tripled in 2 months.</p>
+        <div class="testi-author">
+          <div class="testi-avatar" style="background:rgba(232,93,38,0.15);color:var(--orange)">MF</div>
+          <div><div class="testi-name">Mariam Farooq</div><div class="testi-role">Blogger · Karachi</div></div>
+        </div>
+        <div class="testi-swap">Excel ↔ SEO Strategy</div>
+      </div>
+      <div class="testi-card reveal rd2">
+        <div class="testi-quote">"</div>
+        <p class="testi-text">Swapped video editing for Python automation. The guy I taught now edits my thumbnails. We both saved money and made a genuine friend. Different platform.</p>
+        <div class="testi-author">
+          <div class="testi-avatar" style="background:rgba(78,203,164,0.15);color:var(--mint)">OM</div>
+          <div><div class="testi-name">Omar Malik</div><div class="testi-role">Content Creator · Islamabad</div></div>
+        </div>
+        <div class="testi-swap">Video Editing ↔ Python</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ POST ══ -->
+<section class="section how-bg" id="post">
+  <div class="section-inner">
+    <div class="section-eyebrow reveal">Post a Swap</div>
+    <h2 class="section-title reveal">List your skill.<br/>Find your match.</h2>
+    <div class="post-grid">
+      <div class="post-form reveal">
+        <div class="form-row">
+          <div class="form-group"><label>Your Name</label><input type="text" placeholder="Muhammad Taha" id="f-name"/></div>
+          <div class="form-group"><label>City</label><input type="text" placeholder="Multan" id="f-city"/></div>
+        </div>
+        <div class="form-group"><label>Skill I'm Offering</label><input type="text" placeholder="e.g. Figma UI/UX, React.js, SEO..." id="f-offer"/></div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Category</label>
+            <select id="f-cat">
+              <option value="Design">Design & UI/UX</option>
+              <option value="Code">Programming</option>
+              <option value="Marketing">Marketing & SEO</option>
+              <option value="Language">Languages</option>
+              <option value="Video">Video & Editing</option>
+              <option value="Business">Business & Finance</option>
+              <option value="Music">Music & Audio</option>
+              <option value="Writing">Writing & Content</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Your Level</label>
+            <select id="f-level"><option>Beginner</option><option>Intermediate</option><option selected>Advanced</option></select>
+          </div>
+        </div>
+        <div class="form-group"><label>Skill I Want to Learn</label><input type="text" placeholder="e.g. Python Backend, Video Editing..." id="f-want"/></div>
+        <div class="form-group"><label>Quick Intro (2–3 sentences)</label><textarea placeholder="Tell potential swap partners about your background and what you're hoping to learn..." id="f-bio"></textarea></div>
+        <button class="submit-btn" onclick="postSwap()">Post My Listing →</button>
+      </div>
+      <div class="post-sidebar reveal rd1">
+        <div class="sidebar-title">Tips for a great listing</div>
+        <div class="sidebar-sub">These habits get 3× more swap requests.</div>
+        <div class="tip-list">
+          <div class="tip"><div class="tip-icon">🎯</div><div class="tip-text"><strong>Be specific.</strong> "Figma for mobile wireframes" beats just "design."</div></div>
+          <div class="tip"><div class="tip-icon">⏱️</div><div class="tip-text"><strong>Mention time.</strong> "4 × 1hr sessions" sets clear expectations.</div></div>
+          <div class="tip"><div class="tip-icon">🤝</div><div class="tip-text"><strong>Be realistic.</strong> Match the depth of what you offer vs. what you want.</div></div>
+          <div class="tip"><div class="tip-icon">⭐</div><div class="tip-text"><strong>Rate every swap.</strong> Your rating is your reputation here.</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ CTA ══ -->
+<div class="cta-wrap" style="padding-top:80px">
+  <div class="cta-inner reveal">
+    <div>
+      <div class="cta-title">Your skill is someone's<br/>dream lesson.</div>
+      <div class="cta-sub">Join 2,400+ students and professionals swapping skills across Pakistan. Zero rupees, ever.</div>
+    </div>
+    <button class="btn-cta-dark" onclick="openModal('signup')">Join Free — Start Swapping →</button>
+  </div>
+</div>
+
+<!-- ══ FOOTER ══ -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo">
+      <svg viewBox="0 0 32 32" fill="none" width="22" height="22">
+        <path d="M20 14L24 10M24 10H20M24 10V14" stroke="#E8C547" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M12 18L8 22M8 22H12M8 22V18" stroke="#4ECBA4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="16" cy="16" r="2.5" fill="#E8C547"/>
+      </svg>
+      Skill<span style="color:var(--yellow)">Swap</span>
+    </div>
+    <div class="footer-links">
+      <a href="#how">How it Works</a><a href="#browse">Browse</a><a href="#post">Post</a><a href="#stories">Stories</a>
+    </div>
+    <div class="footer-copy">© 2026 SkillSwap · Built by Muhammad Taha Jaffar</div>
+  </div>
+</footer>
+
+<!-- ══ SWAP MODAL ══ -->
+<div class="modal-overlay" id="swapModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('swapModal')">✕</button>
+    <div class="modal-title">Propose a Swap</div>
+    <div class="modal-sub">Send a request to <span id="modal-name" style="color:var(--yellow);font-weight:700"></span></div>
+    <div class="swap-match-row">
+      <span id="modal-their-skill" class="match-skill"></span>
+      <span style="color:var(--muted)">⇄</span>
+      <span id="modal-your-skill" class="match-skill mint"></span>
+    </div>
+    <div class="modal-form">
+      <div class="form-group"><label>Your Name</label><input type="text" placeholder="Muhammad Taha" id="sw-name"/></div>
+      <div class="form-group"><label>Your Skill to Offer</label><input type="text" id="sw-skill" placeholder="What will you teach?"/></div>
+      <div class="form-group"><label>Message</label><textarea placeholder="Hi! I'd love to swap — I can teach X and want to learn Y from you..." style="min-height:75px" id="sw-msg"></textarea></div>
+      <button class="submit-btn" onclick="sendSwap()">Send Request →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ PROFILE MODAL ══ -->
+<div class="modal-overlay" id="profileModal">
+  <div class="modal profile-modal">
+    <button class="modal-close" onclick="closeModal('profileModal')">✕</button>
+    <div class="pm-header">
+      <div class="pm-avatar" id="pm-avatar"></div>
+      <div>
+        <div class="pm-name" id="pm-name"></div>
+        <div class="pm-location" id="pm-location"></div>
+        <div style="display:flex;align-items:center;gap:6px">
+          <span class="stars" id="pm-stars"></span>
+          <span style="font-size:0.76rem;color:var(--muted)" id="pm-rating-text"></span>
+        </div>
+      </div>
+    </div>
+    <div class="pm-bio" id="pm-bio"></div>
+    <div class="pm-stats">
+      <div class="pm-stat"><div class="pm-stat-num" id="pm-swaps">0</div><div class="pm-stat-label">Swaps</div></div>
+      <div class="pm-stat"><div class="pm-stat-num" id="pm-rating">0</div><div class="pm-stat-label">Rating</div></div>
+      <div class="pm-stat"><div class="pm-stat-num" id="pm-sessions">0</div><div class="pm-stat-label">Sessions</div></div>
+    </div>
+    <div class="pm-section-label">Offering</div>
+    <div class="pm-skills-row" id="pm-offering"></div>
+    <div class="pm-section-label">Wants to Learn</div>
+    <div class="pm-skills-row" id="pm-wants" style="margin-bottom:18px"></div>
+    <div class="pm-actions">
+      <button class="btn-primary" style="flex:1" id="pm-swap-btn">Propose Swap →</button>
+      <button class="btn-outline" style="flex:1" onclick="closeModal('profileModal')">Maybe Later</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ LOGIN ══ -->
+<div class="modal-overlay" id="loginModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('loginModal')">✕</button>
+    <div class="modal-title">Welcome back.</div>
+    <div class="modal-sub">Log in to manage your swaps and listings.</div>
+    <div class="modal-form">
+      <div class="form-group"><label>Email</label><input type="email" placeholder="you@example.com" id="login-email"/></div>
+      <div class="form-group"><label>Password</label><input type="password" placeholder="••••••••" id="login-pass"/></div>
+      <button class="submit-btn" onclick="handleLogin()">Log In →</button>
+      <div style="text-align:center;font-size:0.78rem;color:var(--muted)">No account? <a href="#" style="color:var(--yellow)" onclick="closeModal('loginModal');openModal('signup')">Sign up free</a></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SIGNUP ══ -->
+<div class="modal-overlay" id="signupModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('signupModal')">✕</button>
+    <div class="modal-title">Join SkillSwap.</div>
+    <div class="modal-sub">Free forever. No payment info. No BS.</div>
+    <div class="modal-form">
+      <div class="form-row">
+        <div class="form-group"><label>First Name</label><input type="text" placeholder="Muhammad" id="su-first"/></div>
+        <div class="form-group"><label>Last Name</label><input type="text" placeholder="Taha" id="su-last"/></div>
+      </div>
+      <div class="form-group"><label>Email</label><input type="email" placeholder="you@example.com" id="su-email"/></div>
+      <div class="form-group"><label>Password</label><input type="password" placeholder="Create a password" id="su-pass"/></div>
+      <button class="submit-btn" onclick="handleSignup()">Create Free Account →</button>
+      <div style="text-align:center;font-size:0.78rem;color:var(--muted)">Already in? <a href="#" style="color:var(--yellow)" onclick="closeModal('signupModal');openModal('login')">Log in</a></div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- ══ DASHBOARD ══ -->
+<div class="dash-overlay" id="dashboard">
+  <div class="dash-topbar">
+    <div class="dash-topbar-logo">
+      <svg viewBox="0 0 32 32" fill="none" width="20" height="20"><path d="M20 14L24 10M24 10H20M24 10V14" stroke="#E8C547" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 18L8 22M8 22H12M8 22V18" stroke="#4ECBA4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="16" cy="16" r="2.5" fill="#E8C547"/></svg>
+      Skill<span style="color:var(--yellow)">Swap</span>
+      <span style="font-size:0.72rem;color:var(--muted);font-weight:400;margin-left:4px">/ Dashboard</span>
+    </div>
+    <button class="dash-back" onclick="closeDashboard()">← Back to Site</button>
+  </div>
+  <div class="dash-body">
+    <div class="dash-profile-card">
+      <div class="dash-profile-avatar">TJ</div>
+      <div>
+        <div class="dash-profile-name">Muhammad Taha Jaffar</div>
+        <div class="dash-profile-handle">@taha.jaffar · Multan, Pakistan</div>
+      </div>
+      <div style="margin-left:auto;display:flex;gap:8px;align-items:center">
+        <span class="card-badge badge-open">✓ Active</span>
+        <button class="btn-outline" style="font-size:0.78rem;padding:6px 14px" onclick="closeDashboard();setTimeout(()=>document.getElementById('post').scrollIntoView({behavior:'smooth'}),200)">Edit Listing</button>
+      </div>
+    </div>
+    <div class="dash-kpi-row">
+      <div class="kpi-card"><div class="kpi-num">3</div><div class="kpi-label">Active Swaps</div><div class="kpi-sub">↑ 1 this week</div></div>
+      <div class="kpi-card"><div class="kpi-num">7</div><div class="kpi-label">Requests</div><div class="kpi-sub">2 need response</div></div>
+      <div class="kpi-card"><div class="kpi-num">5.0</div><div class="kpi-label">Rating</div><div class="kpi-sub">★★★★★ (3 reviews)</div></div>
+      <div class="kpi-card"><div class="kpi-num">12</div><div class="kpi-label">Sessions</div><div class="kpi-sub">↑ 4 this month</div></div>
+    </div>
+    <div class="dash-two-col">
+      <div>
+        <div class="dash-panel">
+          <div class="dash-panel-title">Swap Requests <span class="dash-count">7 total</span></div>
+          <div class="dash-tabs">
+            <button class="dash-tab active" onclick="switchTab(this,'di')">Incoming (3)</button>
+            <button class="dash-tab" onclick="switchTab(this,'da')">Active (2)</button>
+            <button class="dash-tab" onclick="switchTab(this,'dc')">Done (2)</button>
+          </div>
+          <div id="di">
+            <div class="req-item"><div class="req-av" style="background:rgba(124,92,252,0.15);color:#a78bfa">AK</div><div><div class="req-name">Ali Khan</div><div class="req-skill">React.js ↔ Figma</div></div><div class="req-actions"><button class="btn-accept" onclick="acceptReq(this,'Ali')">Accept</button><button class="btn-decline" onclick="declineReq(this)">Decline</button></div></div>
+            <div class="req-item"><div class="req-av" style="background:rgba(78,203,164,0.15);color:var(--mint)">OM</div><div><div class="req-name">Omar Malik</div><div class="req-skill">Video Editing ↔ SRS Docs</div></div><div class="req-actions"><button class="btn-accept" onclick="acceptReq(this,'Omar')">Accept</button><button class="btn-decline" onclick="declineReq(this)">Decline</button></div></div>
+            <div class="req-item"><div class="req-av" style="background:rgba(232,197,71,0.15);color:var(--yellow)">ZR</div><div><div class="req-name">Zara Rauf</div><div class="req-skill">IELTS Prep ↔ Figma</div></div><div class="req-actions"><button class="btn-accept" onclick="acceptReq(this,'Zara')">Accept</button><button class="btn-decline" onclick="declineReq(this)">Decline</button></div></div>
+          </div>
+          <div id="da" style="display:none">
+            <div class="req-item"><div class="req-av" style="background:rgba(232,93,38,0.15);color:var(--orange)">SA</div><div><div class="req-name">Sara Ahmed</div><div class="req-skill">SEO ↔ Figma · Session 2/4</div></div><span class="req-status status-active">Active</span></div>
+            <div class="req-item"><div class="req-av" style="background:rgba(232,197,71,0.15);color:var(--yellow)">HB</div><div><div class="req-name">Hamza Baig</div><div class="req-skill">Django ↔ SRS · Session 1/3</div></div><span class="req-status status-active">Active</span></div>
+          </div>
+          <div id="dc" style="display:none">
+            <div class="req-item"><div class="req-av" style="background:rgba(124,92,252,0.15);color:#a78bfa">MF</div><div><div class="req-name">Mariam Farooq</div><div class="req-skill">Figma ↔ Content Writing</div></div><span class="req-status status-done">Done ★4.9</span></div>
+            <div class="req-item"><div class="req-av" style="background:rgba(78,203,164,0.15);color:var(--mint)">RK</div><div><div class="req-name">Raza Khan</div><div class="req-skill">SRS Docs ↔ Django</div></div><span class="req-status status-done">Done ★5.0</span></div>
+          </div>
+        </div>
+        <div class="dash-panel">
+          <div class="dash-panel-title">My Skills</div>
+          <div class="skill-item"><div><div class="skill-item-name">🎨 Figma UI/UX</div><div style="font-size:0.7rem;color:var(--muted)">Design · Advanced</div></div><span class="skill-badge sbadge-offer">Offering</span></div>
+          <div class="skill-item"><div><div class="skill-item-name">📋 SRS Documentation</div><div style="font-size:0.7rem;color:var(--muted)">Design · Intermediate</div></div><span class="skill-badge sbadge-offer">Offering</span></div>
+          <div class="skill-item"><div><div class="skill-item-name">🐍 Python Backend</div><div style="font-size:0.7rem;color:var(--muted)">Code · Beginner</div></div><span class="skill-badge sbadge-learn">Learning</span></div>
+          <div class="skill-item"><div><div class="skill-item-name">⚡ Flask / Django</div><div style="font-size:0.7rem;color:var(--muted)">Code · Beginner</div></div><span class="skill-badge sbadge-learn">Learning</span></div>
+        </div>
+      </div>
+      <div>
+        <div class="dash-panel">
+          <div class="dash-panel-title">Notifications <span class="dash-count">4 new</span></div>
+          <div class="notif-item notif-unread"><div class="notif-icon" style="background:var(--yellow-dim)">🔄</div><div><div class="notif-text">Ali Khan sent a swap request for <strong>Figma UI/UX</strong></div><div class="notif-time">2 hours ago</div></div></div>
+          <div class="notif-item notif-unread"><div class="notif-icon" style="background:var(--mint-dim)">✅</div><div><div class="notif-text">Sara Ahmed accepted your swap request!</div><div class="notif-time">Yesterday</div></div></div>
+          <div class="notif-item notif-unread"><div class="notif-icon" style="background:rgba(232,93,38,0.1)">⭐</div><div><div class="notif-text">Mariam left you a 4.9 ★ review</div><div class="notif-time">2 days ago</div></div></div>
+          <div class="notif-item notif-unread"><div class="notif-icon" style="background:var(--yellow-dim)">🔄</div><div><div class="notif-text">Omar Malik wants to swap for <strong>SRS Docs</strong></div><div class="notif-time">3 days ago</div></div></div>
+        </div>
+        <div class="dash-panel">
+          <div class="dash-panel-title">Smart Matches 🎯</div>
+          <div style="font-size:0.78rem;color:var(--muted);margin-bottom:12px">Based on your Figma + SRS skills:</div>
+          <div class="notif-item" style="cursor:pointer;transition:background 0.15s" onclick="closeDashboard();openProfile('Ali Khan','AK','Lahore','rgba(124,92,252,0.15)','#a78bfa','Frontend developer with 3 years of React.','React.js,JavaScript','Figma,UI Principles',4.8,12,28)">
+            <div class="notif-icon" style="background:rgba(124,92,252,0.15);color:#a78bfa;font-size:0.7rem;font-weight:700;font-family:Sora">AK</div>
+            <div><div class="notif-text"><strong>Ali Khan</strong> · React ↔ Figma</div><div class="notif-time">96% match · Lahore</div></div>
+          </div>
+          <div class="notif-item" style="cursor:pointer;transition:background 0.15s;margin-top:6px" onclick="closeDashboard();openProfile('Hamza Baig','HB','Peshawar','rgba(232,197,71,0.12)','var(--yellow)','Backend dev specializing in Django APIs.','Django REST,PostgreSQL','AWS Basics,Docker',4.9,6,18)">
+            <div class="notif-icon" style="background:var(--yellow-dim);color:var(--yellow);font-size:0.7rem;font-weight:700;font-family:Sora">HB</div>
+            <div><div class="notif-text"><strong>Hamza Baig</strong> · Django ↔ SRS</div><div class="notif-time">88% match · Peshawar</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ══ 3D ORBIT TAGS ══
+const tags1 = ['React.js','Figma','Python','Django'];
+const tags2 = ['SEO','Video Editing','IELTS','After Effects'];
+const tags3 = ['AWS','Docker','Canva','PostgreSQL'];
+const tagClasses = ['tag-yellow','tag-mint','tag-orange','tag-neutral'];
+
+function buildRing(ringId, tags, radius){
+  const ring = document.getElementById(ringId);
+  const count = tags.length;
+  tags.forEach((tag, i) => {
+    const angle = (i / count) * 360;
+    const rad = angle * Math.PI / 180;
+    const x = Math.cos(rad) * radius;
+    const y = Math.sin(rad) * radius;
+    const el = document.createElement('span');
+    el.className = 'orbit-tag ' + tagClasses[i % tagClasses.length];
+    el.textContent = tag;
+    el.style.cssText = `left:calc(50% + ${x}px);top:calc(50% + ${y}px);transform:translate(-50%,-50%)`;
+    ring.appendChild(el);
+  });
+}
+buildRing('ring1', tags1, 130);
+buildRing('ring2', tags2, 165);
+buildRing('ring3', tags3, 98);
+
+// ══ 3D CARD TILT ══
+document.querySelectorAll('.skill-card').forEach(card => {
+  card.addEventListener('mousemove', e => {
+    const rect = card.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const cx = rect.width / 2;
+    const cy = rect.height / 2;
+    const rotX = ((y - cy) / cy) * -8;
+    const rotY = ((x - cx) / cx) * 8;
+    card.style.transform = `perspective(600px) rotateX(${rotX}deg) rotateY(${rotY}deg) translateZ(6px)`;
+    const shine = card.querySelector('.card-shine');
+    if(shine){
+      shine.style.background = `radial-gradient(circle at ${x}px ${y}px, rgba(242,237,228,0.07), transparent 55%)`;
+    }
+  });
+  card.addEventListener('mouseleave', () => {
+    card.style.transform = '';
+    card.style.transition = 'transform 0.4s ease, box-shadow 0.15s, border-color 0.15s';
+    setTimeout(() => { card.style.transition = ''; }, 400);
+  });
+});
+
+// ══ COUNTERS ══
+function animateCounter(el, target){
+  let current = 0;
+  const step = Math.ceil(target / 55);
+  const timer = setInterval(() => {
+    current = Math.min(current + step, target);
+    el.textContent = current.toLocaleString();
+    if(current >= target) clearInterval(timer);
+  }, 18);
+}
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if(e.isIntersecting){
+      animateCounter(document.getElementById('counter1'), 2400);
+      animateCounter(document.getElementById('counter2'), 890);
+      animateCounter(document.getElementById('counter3'), 1200);
+      obs.disconnect();
+    }
+  });
+},{threshold:0.3});
+obs.observe(document.querySelector('.hero-stats'));
+
+// ══ REVEAL ══
+const revObs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
+},{threshold:0.06, rootMargin:'0px 0px -20px 0px'});
+document.querySelectorAll('.reveal').forEach(el => revObs.observe(el));
+
+// ══ FILTER + SEARCH ══
+let activeCat = 'All';
+function filterSkills(cat){
+  activeCat = cat;
+  document.querySelectorAll('.filter-pill').forEach(b => {
+    b.classList.toggle('active', b.textContent.includes(cat==='All'?'All':cat));
+  });
+  applyFilters();
+}
+function applyFilters(){
+  const q = (document.getElementById('searchInput').value||'').toLowerCase();
+  const city = (document.getElementById('cityFilter').value||'').toLowerCase();
+  const level = (document.getElementById('levelFilter').value||'').toLowerCase();
+  let vis = 0;
+  document.querySelectorAll('.skill-card').forEach(card => {
+    const catOk = activeCat === 'All' || card.dataset.cat === activeCat;
+    const cityOk = !city || card.dataset.city.includes(city);
+    const levelOk = !level || (card.dataset.level||'').includes(level);
+    const qOk = !q || card.dataset.name.includes(q) || (card.dataset.skills||'').includes(q);
+    const show = catOk && cityOk && levelOk && qOk;
+    card.style.display = show ? '' : 'none';
+    if(show) vis++;
+  });
+  document.getElementById('noResults').style.display = vis === 0 ? 'block' : 'none';
+}
+
+// ══ MODALS ══
+function openModal(type){
+  if(type==='login') document.getElementById('loginModal').classList.add('open');
+  if(type==='signup') document.getElementById('signupModal').classList.add('open');
+}
+function closeModal(id){ document.getElementById(id).classList.remove('open'); }
+document.querySelectorAll('.modal-overlay').forEach(m => {
+  m.addEventListener('click', e => { if(e.target===m) m.classList.remove('open'); });
+});
+document.addEventListener('keydown', e => {
+  if(e.key==='Escape') document.querySelectorAll('.modal-overlay.open').forEach(m=>m.classList.remove('open'));
+});
+
+// ══ PROFILE ══
+function openProfile(name,initials,city,bg,color,bio,offering,wants,rating,swaps,sessions){
+  const av = document.getElementById('pm-avatar');
+  av.textContent = initials; av.style.background = bg; av.style.color = color;
+  document.getElementById('pm-name').textContent = name;
+  document.getElementById('pm-location').textContent = `📍 ${city}, Pakistan`;
+  const s = Math.round(rating);
+  document.getElementById('pm-stars').textContent = '★'.repeat(s)+'☆'.repeat(5-s);
+  document.getElementById('pm-rating-text').textContent = `${rating} · ${swaps} swaps`;
+  document.getElementById('pm-bio').textContent = bio;
+  document.getElementById('pm-swaps').textContent = swaps;
+  document.getElementById('pm-rating').textContent = rating;
+  document.getElementById('pm-sessions').textContent = sessions;
+  const off = offering.split(',');
+  const wnt = wants.split(',');
+  document.getElementById('pm-offering').innerHTML = off.map(s=>`<span class="skill-tag offer">${s.trim()}</span>`).join('');
+  document.getElementById('pm-wants').innerHTML = wnt.map(s=>`<span class="skill-tag want">${s.trim()}</span>`).join('');
+  document.getElementById('pm-swap-btn').onclick = () => {
+    closeModal('profileModal');
+    document.getElementById('modal-name').textContent = name;
+    document.getElementById('modal-their-skill').textContent = off[0].trim();
+    document.getElementById('modal-your-skill').textContent = wnt[0].trim();
+    ['sw-name','sw-skill','sw-msg'].forEach(id => document.getElementById(id).value='');
+    document.getElementById('swapModal').classList.add('open');
+  };
+  document.getElementById('profileModal').classList.add('open');
+}
+
+// ══ SWAP SEND ══
+function sendSwap(){
+  if(!document.getElementById('sw-name').value.trim()){ showToast('⚠️ Please enter your name'); return; }
+  closeModal('swapModal');
+  showToast('✅ Swap request sent! They\'ll respond within 24h.');
+}
+
+// ══ POST SWAP ══
+function postSwap(){
+  const name = document.getElementById('f-name').value.trim();
+  const offer = document.getElementById('f-offer').value.trim();
+  const want = document.getElementById('f-want').value.trim();
+  const city = document.getElementById('f-city').value.trim();
+  const cat = document.getElementById('f-cat').value;
+  const level = document.getElementById('f-level').value;
+  if(!name||!offer||!want){ showToast('⚠️ Please fill in name, skill offered, and skill wanted'); return; }
+  const initials = name.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);
+  const palettes = [
+    ['rgba(232,197,71,0.15)','var(--yellow)'],
+    ['rgba(78,203,164,0.15)','var(--mint)'],
+    ['rgba(232,93,38,0.15)','var(--orange)'],
+    ['rgba(124,92,252,0.15)','#a78bfa']
+  ];
+  const [bg,color] = palettes[Math.floor(Math.random()*palettes.length)];
+  const card = document.createElement('div');
+  card.className = 'skill-card reveal visible';
+  card.dataset.cat = cat; card.dataset.city = city.toLowerCase();
+  card.dataset.name = name.toLowerCase(); card.dataset.level = level.toLowerCase();
+  card.dataset.skills = (offer+' '+want).toLowerCase();
+  card.innerHTML = `<div class="card-shine"></div>
+    <div class="card-top"><div class="card-avatar" style="background:${bg};color:${color}">${initials}</div><span class="card-badge badge-hot">✨ New</span></div>
+    <div class="card-name">${name}</div><div class="card-loc">📍 ${city||'Pakistan'} · ${level}</div>
+    <div class="card-label">Offering</div><div style="margin-bottom:10px"><span class="skill-tag offer">🎯 ${offer}</span></div>
+    <div class="card-label">Wants</div><div><span class="skill-tag want">📚 ${want}</span></div>
+    <div class="card-divider"></div>
+    <div class="card-footer">
+      <div class="card-rating"><span class="stars">★★★★★</span> <span>New</span></div>
+      <button class="card-btn" onclick="openProfile('${name}','${initials}','${city||'Pakistan'}','${bg}','${color}','Just joined SkillSwap!','${offer}','${want}',5.0,0,0)">View →</button>
+    </div>`;
+  // re-apply tilt to new card
+  card.addEventListener('mousemove', e => {
+    const rect = card.getBoundingClientRect();
+    const rotX = (((e.clientY-rect.top)/rect.height)-0.5)*-14;
+    const rotY = (((e.clientX-rect.left)/rect.width)-0.5)*14;
+    card.style.transform = `perspective(600px) rotateX(${rotX}deg) rotateY(${rotY}deg) translateZ(6px)`;
+  });
+  card.addEventListener('mouseleave', () => {
+    card.style.transform = '';
+    card.style.transition = 'transform 0.4s ease';
+    setTimeout(()=>card.style.transition='',400);
+  });
+  document.getElementById('skillsGrid').prepend(card);
+  ['f-name','f-city','f-offer','f-want','f-bio'].forEach(id => document.getElementById(id).value='');
+  showToast('🎉 Listing posted! You\'ll get matches soon.');
+  setTimeout(()=>document.getElementById('browse').scrollIntoView({behavior:'smooth'}),700);
+}
+
+// ══ AUTH ══
+function handleLogin(){
+  if(!document.getElementById('login-email').value.trim()){ showToast('⚠️ Please enter your email'); return; }
+  closeModal('loginModal'); showToast('👋 Welcome back!');
+}
+function handleSignup(){
+  const first = document.getElementById('su-first').value.trim();
+  const email = document.getElementById('su-email').value.trim();
+  if(!first||!email){ showToast('⚠️ Please fill in all fields'); return; }
+  closeModal('signupModal'); showToast(`🎉 Welcome to SkillSwap, ${first}!`);
+}
+
+// ══ DASHBOARD ══
+function openDashboard(){ document.getElementById('dashboard').classList.add('open'); document.body.style.overflow='hidden'; }
+function closeDashboard(){ document.getElementById('dashboard').classList.remove('open'); document.body.style.overflow=''; }
+function switchTab(btn, id){
+  const panel = btn.closest('.dash-panel');
+  panel.querySelectorAll('.dash-tab').forEach(t=>t.classList.remove('active'));
+  btn.classList.add('active');
+  ['di','da','dc'].forEach(tid => { const el = panel.querySelector('#'+tid); if(el) el.style.display = tid===id?'block':'none'; });
+}
+function acceptReq(btn, name){ btn.closest('.req-actions').innerHTML=`<span class="req-status status-active">Accepted ✓</span>`; showToast(`✅ Swap with ${name} accepted!`); }
+function declineReq(btn){ const item=btn.closest('.req-item'); item.style.opacity='0.35'; item.style.pointerEvents='none'; showToast('ℹ️ Request declined.'); }
+
+// ══ TOAST ══
+function showToast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 3200);
+}
+
+// ══ NAV ══
+window.addEventListener('scroll',()=>{
+  document.getElementById('navbar').style.background = window.scrollY>50?'rgba(14,12,10,0.98)':'rgba(14,12,10,0.88)';
+},{passive:true});
+const secs = document.querySelectorAll('section[id]');
+const lnks = document.querySelectorAll('.nav-links a');
+window.addEventListener('scroll',()=>{
+  let cur='';
+  secs.forEach(s=>{if(window.scrollY>=s.offsetTop-100)cur=s.id});
+  lnks.forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+cur));
+},{passive:true});
+function toggleMobileMenu(){ document.getElementById('mobileMenu').classList.toggle('open'); }
+function closeMobileMenu(){ document.getElementById('mobileMenu').classList.remove('open'); }
+</script>
+</body>
+</html>
