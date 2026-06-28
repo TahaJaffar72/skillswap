@@ -3,7 +3,7 @@
 
 > Trade your skill. Learn theirs. Zero rupees.
 
-**[🔗 Live Demo](#)** 
+**[🔗 Live Demo](#)** <!-- Vercel link yahan dalenge -->
 
 ---
 
@@ -20,11 +20,14 @@ to learn. No money. Just skills.
 
 ## Features
 
-- 🎯 **Live Skill Listings** — browse real swap offers with category, city and level filters
+- 🎯 **Live Skill Listings** — browse real swap offers with 
+  category, city and level filters
 - 🔍 **Smart Search** — search by skill, name or city in real time
-- 👤 **Profile Modals** — view full profiles with ratings, completed swaps and skill tags
+- 👤 **Profile Modals** — view full profiles with ratings, 
+  completed swaps and skill tags
 - 🔄 **Swap Request Flow** — send requests with custom messages
-- 📊 **Dashboard** — manage incoming/active/completed swaps, notifications and smart matches
+- 📊 **Dashboard** — manage incoming/active/completed swaps, 
+  notifications and smart matches
 - ✨ **Post a Swap** — form that actually adds your card to the grid
 - 📱 **Fully Responsive** — mobile, tablet and desktop
 
@@ -52,9 +55,22 @@ to learn. No money. Just skills.
 
 ---
 
+## Screenshots
+
+<img width="1901" height="866" alt="image" src="https://github.com/user-attachments/assets/a01a9d3c-f126-487e-8f71-403821752cfb" />
+<img width="1776" height="854" alt="image" src="https://github.com/user-attachments/assets/43c93772-3f81-4fd1-8761-5367df7ca72d" />
+<img width="1918" height="881" alt="image" src="https://github.com/user-attachments/assets/fa70d351-6116-435e-901d-9f8352c5faab" />
+<img width="1887" height="872" alt="image" src="https://github.com/user-attachments/assets/9940e311-cace-45d6-b3a7-913b12bb5818" />
+<img width="1527" height="622" alt="image" src="https://github.com/user-attachments/assets/71b16a10-9694-464d-a241-43e50acd944b" />
+<img width="1906" height="779" alt="image" src="https://github.com/user-attachments/assets/0791f4a0-dfe4-46aa-9647-ae9798ce459e" />
+<img width="1898" height="869" alt="image" src="https://github.com/user-attachments/assets/7d7de0b5-2d9d-49aa-ad11-a01d42048c27" />
+
+
+
 ## Run Locally
 
 ```bash
+# Just open the file — no build step needed
 open skillswap-v3.html
 ```
 
